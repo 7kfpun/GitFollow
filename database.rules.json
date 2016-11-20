@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "following": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "organizations": {
+      ".read": true,
+    	".write": true
+    }
+  }
+}

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import { darkBlack } from 'material-ui/styles/colors';
+import { GoComment, GoCommentDiscussion, GoGitPullRequest, GoIssueOpened, GoRepoForked } from 'react-icons/lib/go';
 import { List, ListItem } from 'material-ui/List';
-import CallMerge from 'material-ui/svg-icons/communication/call-merge';
 import CircularProgress from 'material-ui/CircularProgress';
-import Close from 'material-ui/svg-icons/navigation/close';
-import ContentInbox from 'material-ui/svg-icons/content/inbox';
 import FlatButton from 'material-ui/FlatButton';
-import ModeComment from 'material-ui/svg-icons/editor/mode-comment';
 import RemoveRedEye from 'material-ui/svg-icons/image/remove-red-eye';
+// import Close from 'material-ui/svg-icons/navigation/close';
 
 import firebase from 'firebase';
 import moment from 'moment';
@@ -73,7 +72,7 @@ export default class EventList extends Component {
             target="_blank"
             primaryText={`${item.actor.display_login} forks ${item.repo.name}`}
             secondaryText={moment(item.created_at).fromNow()}
-            leftIcon={<ContentInbox />}
+            leftIcon={<GoRepoForked />}
           />);
         } else if (item.type === 'IssuesEvent') {
           return (<ListItem
@@ -81,8 +80,13 @@ export default class EventList extends Component {
             href={item.payload.issue.html_url}
             target="_blank"
             primaryText={`${item.actor.display_login} ${item.payload.action} on issue of ${item.repo.name}`}
-            secondaryText={item.payload.issue.title}
-            leftIcon={<Close />}
+            secondaryText={
+              <p>
+                {moment(item.created_at).fromNow()}
+                <span style={{ color: darkBlack }}> - {item.payload.issue.title}</span>
+              </p>
+            }
+            leftIcon={<GoIssueOpened />}
           />);
         } else if (item.type === 'IssueCommentEvent') {
           return (<ListItem
@@ -90,8 +94,13 @@ export default class EventList extends Component {
             href={item.payload.comment.html_url}
             target="_blank"
             primaryText={`${item.actor.display_login} commented on issue ${item.payload.issue.number} of ${item.repo.name}`}
-            secondaryText={item.payload.issue.title}
-            leftIcon={<ModeComment />}
+            secondaryText={
+              <p>
+                {moment(item.created_at).fromNow()}
+                <span style={{ color: darkBlack }}> - {item.payload.issue.title}</span>
+              </p>
+            }
+            leftIcon={<GoComment />}
           />);
         } else if (item.type === 'PullRequestEvent') {
           return (<ListItem
@@ -99,8 +108,13 @@ export default class EventList extends Component {
             href={item.payload.pull_request.html_url}
             target="_blank"
             primaryText={`${item.actor.display_login} ${item.payload.action} a pull request of ${item.repo.name}`}
-            secondaryText={item.payload.pull_request.title}
-            leftIcon={<CallMerge />}
+            secondaryText={
+              <p>
+                {moment(item.created_at).fromNow()}
+                <span style={{ color: darkBlack }}> - {item.payload.pull_request.title}</span>
+              </p>
+            }
+            leftIcon={<GoGitPullRequest />}
           />);
         } else if (item.type === 'PullRequestReviewCommentEvent') {
           return (<ListItem
@@ -108,8 +122,13 @@ export default class EventList extends Component {
             href={item.payload.pull_request.html_url}
             target="_blank"
             primaryText={`${item.actor.display_login} a commented on a pull request of ${item.repo.name}`}
-            secondaryText={item.payload.pull_request.title}
-            leftIcon={<CallMerge />}
+            secondaryText={
+              <p>
+                <span style={{ color: darkBlack }}>to me, Scott, Jennifer</span> --
+                {item.payload.pull_request.title}
+              </p>
+            }
+            leftIcon={<GoCommentDiscussion />}
           />);
         }
         // GollumEvent

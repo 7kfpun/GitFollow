@@ -9,6 +9,7 @@ import store from 'store2';
 
 const styles = {
   container: {
+    marginTop: 70,
     width: '80%',
     textAlign: 'center',
   },
@@ -21,7 +22,7 @@ export default class Login extends Component {
     this.state = {
       isLogged: false,
       user: null,
-      open: false,
+      open: this.props.open,
     };
   }
 
@@ -74,9 +75,11 @@ export default class Login extends Component {
         this.setState({
           user: result.user,
           credential: result.credential,
+          open: false,
         });
         store('accessToken', result.credential.accessToken);
         this.props.AuthStore.setAccessToken(result.credential.accessToken);
+        location.reload();  // eslint-disable-line no-undef
       }).catch((error) => {
         console.error(error);
         // const errorCode = error.code;
@@ -102,10 +105,9 @@ export default class Login extends Component {
         onTouchTap={() => this.handleClose()}
       />,
       <FlatButton
-        label="Submit"
+        label="Login with Github"
         primary={true}
-        disabled={true}
-        onTouchTap={() => this.handleClose()}
+        onTouchTap={() => this.toggleSignIn()}
       />,
     ];
 
@@ -124,16 +126,13 @@ export default class Login extends Component {
         </Card>
 
         <Dialog
-          title="Dialog With Actions"
+          title="Login with your Github Account"
           actions={actions}
           onRequestClose={() => this.handleClose()}
           modal={true}
           open={this.state.open}
         >
-          <div>
-            {this.state.user && `Hi ${this.state.user.displayName} (${this.state.user.email})`}
-            <RaisedButton label={!this.state.user ? 'SIGN IN' : 'SIGN OUT'} onTouchTap={() => this.toggleSignIn()} />
-          </div>
+          {'Let\'s login with your GitHub account and start following organizations you like.'}
         </Dialog>
       </div>
     );
@@ -145,4 +144,5 @@ Login.propTypes = {
     setAccessToken: React.PropTypes.func,
     setUserInfo: React.PropTypes.func,
   }),
+  open: React.PropTypes.bool,
 };

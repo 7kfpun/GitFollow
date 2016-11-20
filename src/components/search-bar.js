@@ -30,17 +30,17 @@ export default class SearchBar extends Component {
       .then(response => response.json())
       .then((json) => {
         console.log(json);
-        if (json && json.items.length > 0) {
+        if (json && json.items && json.items.length > 0) {
           that.setState({
             dataSource: json.items.map(item => item.login),
             results: json.items,
           });
+        } else if (json.message.indexOf('API rate limit') !== -1) {
+          console.error('RATE LIMIT ERROR');
+          that.props.AuthStore.openLoginDialog();
         }
       })
       .catch((err) => {
-        if (err.message.indexOf('API rate limit') !== -1) {
-          console.error('RATE LIMIT ERROR');
-        }
         console.error(err);
       });
   }

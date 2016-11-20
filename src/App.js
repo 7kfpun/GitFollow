@@ -35,10 +35,8 @@ const styles = {
     backgroundColor: 'white',
   },
   loginBlock: {
-    paddingTop: 100,
     display: 'flex',
     flexDirection: 'column',
-    flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -49,6 +47,7 @@ class App extends Component {
     super(props);
     this.state = {
       snackbarOpen: false,
+      isLoading: true,
     };
   }
 
@@ -63,35 +62,47 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Toolbar>
-          <ToolbarGroup firstChild={true}><ToolbarTitle style={{ marginLeft: 50 }} text="Git Follow" /></ToolbarGroup>
-          <ToolbarGroup>
-            <SearchBar AuthStore={this.props.AuthStore} accessToken={this.props.AuthStore.accessToken} uid={this.props.AuthStore.uid} />
-            <Avatar style={styles.avatar} src={this.props.AuthStore.photoURL} />
-            <IconMenu
-              iconButtonElement={
-                <IconButton touch={true}>
-                  <NavigationExpandMoreIcon />
-                </IconButton>
-              }
-            >
-              <MenuItem primaryText="About Us" onTouchTap={() => this.handleSnackbarTouchTap()} />
-              <MenuItem primaryText="Sign Out" onTouchTap={() => firebase.auth().signOut()} />
-            </IconMenu>
-          </ToolbarGroup>
-        </Toolbar>
+        <div className="App-content">
+          <Toolbar>
+            <ToolbarGroup firstChild={true}><ToolbarTitle style={{ marginLeft: 50 }} text="Git Follow" /></ToolbarGroup>
+            <ToolbarGroup>
+              <SearchBar AuthStore={this.props.AuthStore} accessToken={this.props.AuthStore.accessToken} uid={this.props.AuthStore.uid} />
+              <Avatar style={styles.avatar} src={this.props.AuthStore.photoURL} />
+              <IconMenu
+                iconButtonElement={
+                  <IconButton touch={true}>
+                    <NavigationExpandMoreIcon />
+                  </IconButton>
+                }
+              >
+                <MenuItem primaryText="About Us" onTouchTap={() => this.handleSnackbarTouchTap()} />
+                {this.props.AuthStore.accessToken && <MenuItem
+                  primaryText="Sign Out"
+                  onTouchTap={() => {
+                    firebase.auth().signOut();
+                    location.reload();  // eslint-disable-line no-undef
+                  }}
+                />}
+              </IconMenu>
+            </ToolbarGroup>
+          </Toolbar>
 
-        {this.props.AuthStore.accessToken && <div style={styles.container}>
-          <Organization accessToken={this.props.AuthStore.accessToken} uid={this.props.AuthStore.uid} />
-        </div>}
+          {this.props.AuthStore.accessToken && <div style={styles.container}>
+            <Organization accessToken={this.props.AuthStore.accessToken} uid={this.props.AuthStore.uid} />
+          </div>}
 
-        {!this.props.AuthStore.accessToken && <div style={styles.loginBlock}>
-          <Login AuthStore={this.props.AuthStore} accessToken={this.props.AuthStore.accessToken} open={this.props.AuthStore.isLoginNeeded} />
-        </div>}
+          {!this.props.AuthStore.accessToken && <div style={styles.loginBlock}>
+            <Login key={this.props.AuthStore.isLoginNeeded} AuthStore={this.props.AuthStore} accessToken={this.props.AuthStore.accessToken} open={this.props.AuthStore.isLoginNeeded} />
+          </div>}
+        </div>
+
+        <div style={{ backgroundColor: 'black', padding: 50 }}>
+          <h4 style={{ color: 'white' }}>{'Made with <3 in Hong Kong'}</h4>
+        </div>
 
         <Snackbar
           open={this.state.snackbarOpen}
-          message="Not impremented yet ;)"
+          message="Sorry, not impremented yet ;)"
           autoHideDuration={4000}
           onRequestClose={() => this.handleSnackbarRequestClose()}
         />

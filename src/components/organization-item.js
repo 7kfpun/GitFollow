@@ -24,7 +24,7 @@ export default class OrganizationItem extends Component {
     this.state = {
       isFollowed: false,
       organization: {},
-      showType: 'EVENT',
+      showType: this.props.showingType || 'EVENT',
       expanded: this.props.expanded || false,
     };
   }
@@ -32,24 +32,28 @@ export default class OrganizationItem extends Component {
   componentDidMount() {
     const that = this;
 
-    const organizationRef = firebase.database().ref(`organization/${this.props.orgid}`);
-    organizationRef.on('value', (snapshot) => {
-      if (snapshot.val()) {
-        console.log('organizationRef', snapshot.val());
-        that.setState({ organization: snapshot.val() });
-      } else {
-        fetch(`https://api.github.com/users/${this.props.name}`)  // eslint-disable-line no-undef
-          .then(response => response.json())
-          .then((json) => {
-            console.log('Organization', json);
-            if (json) {
-              that.setState({ organization: json });
-              that.storeOrganization(json);
-            }
-          })
-          .catch(err => console.error(err));
-      }
-    });
+    // const organizationRef = firebase.database().ref(`organization/${this.props.orgid}`);
+    // organizationRef.on('value', (snapshot) => {
+    //   if (snapshot.val()) {
+    //     console.log('organizationRef', snapshot.val());
+    //     that.setState({ organization: snapshot.val() });
+    //   } else {
+    let url = `https://api.github.com/users/${this.props.name}?`;
+    if (this.props.accessToken) {
+      url += `&access_token=${this.props.accessToken}`;
+    }
+    fetch(url)  // eslint-disable-line no-undef
+      .then(response => response.json())
+      .then((json) => {
+        console.log('Organization', json);
+        if (json) {
+          that.setState({ organization: json });
+          that.storeOrganization(json);
+        }
+      })
+      .catch(err => console.error(err));
+    //   }
+    // });
   }
 
   storeOrganization(organization) {
@@ -99,7 +103,6 @@ export default class OrganizationItem extends Component {
 
 OrganizationItem.propTypes = {
   expanded: React.PropTypes.bool,
-  orgid: React.PropTypes.number,
   name: React.PropTypes.string,
   accessToken: React.PropTypes.string,
   uid: React.PropTypes.string,

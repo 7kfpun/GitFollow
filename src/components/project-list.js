@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { GoRepo, GoRepoForked, GoStar } from 'react-icons/lib/go';
+import { FaCircle } from 'react-icons/lib/fa';
+import { lightBlack } from 'material-ui/styles/colors';
 import { List, ListItem } from 'material-ui/List';
-import ActionUpdate from 'material-ui/svg-icons/action/update';
 import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -56,15 +58,9 @@ export default class ProjectList extends Component {
         key={i}
         href={item.html_url}
         target="_blank"
-        primaryText={`${item.name}`}
-        secondaryText={
-          <p>
-            <span style={{ color: 'black' }}>{item.description}</span><br />
-            <span style={{ color: 'gray' }}>{item.language} {item.stargazers_count} {item.forks_count} {moment(item.updated_at).fromNow()}</span>
-          </p>
-        }
-        secondaryTextLines={2}
-        leftIcon={<ActionUpdate />}
+        primaryText={<span>{item.name} <span style={{ color: lightBlack }}>- {item.description}</span></span>}
+        secondaryText={<p>{moment(item.updated_at).fromNow()} <FaCircle />{item.language} <GoStar />{item.stargazers_count} <GoRepoForked />{item.forks_count}</p>}
+        leftIcon={<GoRepo />}
       />);
     }
 
