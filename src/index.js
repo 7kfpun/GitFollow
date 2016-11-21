@@ -6,10 +6,22 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { Provider } from 'mobx-react';
 
+import firebase from 'firebase';
+
 import App from './App';
+import Landing from './Landing';
 import AuthStore from './store/authStore';
 
 import './index.css';
+
+const config = {
+  apiKey: 'AIzaSyDMTCNj5Xa_O4VmNOFncN2qCd0ml_gHbV8',
+  authDomain: 'gitfollow.firebaseapp.com',
+  databaseURL: 'https://gitfollow.firebaseio.com',
+  storageBucket: 'gitfollow.appspot.com',
+  messagingSenderId: '1014685065269',
+};
+firebase.initializeApp(config);
 
 injectTapEventPlugin();
 
@@ -20,6 +32,7 @@ ReactDOM.render(
     <Provider {...stores}>
       <Router history={browserHistory}>
         <Route path="/" component={App} />
+        <Route path="/landing" component={Landing} />
       </Router>
     </Provider>
   </MuiThemeProvider>,

@@ -10,12 +10,7 @@ import Snackbar from 'material-ui/Snackbar';
 
 import firebase from 'firebase';
 
-import Login from './components/login';
 import SearchBar from './components/search-bar';
-
-import Organization from './components/organization';
-
-import MostFollowed from './components/most-followed';
 
 import './App.css';
 
@@ -57,7 +52,7 @@ class App extends Component {
       <div className="App">
         <div className="App-content">
           <Toolbar>
-            <ToolbarGroup firstChild={true}><ToolbarTitle style={{ marginLeft: 50 }} text="GitFollow" /></ToolbarGroup>
+            <ToolbarGroup firstChild={true}><ToolbarTitle style={{ marginLeft: 50 }} text="Git Follow" /></ToolbarGroup>
             <ToolbarGroup>
               <SearchBar AuthStore={this.props.AuthStore} accessToken={this.props.AuthStore.accessToken} uid={this.props.AuthStore.uid} />
               <Avatar style={styles.avatar} src={this.props.AuthStore.photoURL} />
@@ -80,21 +75,18 @@ class App extends Component {
             </ToolbarGroup>
           </Toolbar>
 
-          {this.props.AuthStore.accessToken && <div style={styles.container}>
-            <Organization accessToken={this.props.AuthStore.accessToken} uid={this.props.AuthStore.uid} />
-          </div>}
+          <video autoPlay loop id="video-background" muted>
+            <source src="./Love-Coding.mp4" type="video/mp4" />
+          </video>
 
-          {!this.props.AuthStore.accessToken && <div>
-            <div style={styles.loginBlock}>
-              <Login key={this.props.AuthStore.isLoginNeeded} AuthStore={this.props.AuthStore} accessToken={this.props.AuthStore.accessToken} open={this.props.AuthStore.isLoginNeeded} />
-            </div>
-
-            <MostFollowed AuthStore={this.props.AuthStore} />
-          </div>}
+          <div style={styles.loginBlock}>
+            <p>What is GitFollow?</p>
+          </div>
         </div>
 
+
         <div style={{ backgroundColor: 'black', padding: 50 }}>
-          <h4 style={{ color: 'white' }}>{'Made with <3 in Hong Kong © 2016 GitFollow'}</h4>
+          <h4 style={{ color: 'white' }}>{'Made with <3 in Hong Kong'}</h4>
         </div>
 
         <Snackbar
@@ -113,7 +105,6 @@ App.propTypes = {
     uid: React.PropTypes.string,
     accessToken: React.PropTypes.string,
     photoURL: React.PropTypes.string,
-    isLoginNeeded: React.PropTypes.bool,
   }),
   accessToken: React.PropTypes.string,
 };

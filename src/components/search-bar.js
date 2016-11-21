@@ -14,7 +14,7 @@ export default class SearchBar extends Component {
   }
 
   handleUpdateInput(value) {
-    if (value.length < 3) {
+    if (value.length < 2) {
       return false;
     }
 
@@ -61,6 +61,7 @@ export default class SearchBar extends Component {
     const uid = this.props.uid;
     firebase.database().ref(`following/${uid}`).child(organization.id).set({
       id: organization.id,
+      avatar_url: organization.avatar_url,
       login: organization.login,
       html_url: organization.html_url,
       site_admin: organization.site_admin,

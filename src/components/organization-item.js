@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { GoLink, GoLocation } from 'react-icons/lib/go';
 import Avatar from 'material-ui/Avatar';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -69,14 +70,22 @@ export default class OrganizationItem extends Component {
       <Card style={styles.container} initiallyExpanded={this.props.expanded} expanded={this.state.expanded} onExpandChange={expanded => this.handleExpandChange(expanded)}>
         <CardHeader
           avatar={<Avatar style={{ backgroundColor: 'white' }} src={this.state.organization.avatar_url} />}
-          title={this.props.name}
-          subtitle={this.state.organization.html_url}
+          title={<span>
+            {this.state.organization.login ? this.state.organization.login : ''}
+            {this.state.organization.name ? ` (${this.state.organization.name})` : ''}
+          </span>}
+          subtitle={
+            <p>
+              {this.state.organization.bio ? <span>{this.state.organization.bio}<br /><br /></span> : ''}
+              {this.state.organization.location ? <span><GoLocation /> {this.state.organization.location}</span> : ''}
+              {this.state.organization.blog ? <span> <GoLink /> {this.state.organization.blog}</span> : ''}
+            </p>
+          }
           actAsExpander={true}
           showExpandableButton={true}
         />
         <CardText expandable={true}>
-          {this.state.organization.bio || this.state.organization.blog ? `Blog: ${this.state.organization.blog}` : ''}
-          <div style={{ marginTop: 20 }}>
+          <div>
             <RaisedButton
               label="Events"
               style={styles.button}
@@ -102,6 +111,7 @@ export default class OrganizationItem extends Component {
 }
 
 OrganizationItem.propTypes = {
+  showingType: React.PropTypes.string,
   expanded: React.PropTypes.bool,
   name: React.PropTypes.string,
   accessToken: React.PropTypes.string,

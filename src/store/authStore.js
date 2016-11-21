@@ -10,7 +10,7 @@ class AuthStore {
 
       displayName: '',
       email: '',
-      photoURL: 'http://image.flaticon.com/icons/svg/25/25231.svg',
+      photoURL: './icon.png',
       uid: '',
     });
   }
@@ -35,6 +35,11 @@ class AuthStore {
   openLoginDialog() {
     console.log('openLoginDialog');
     this.isLoginNeeded = true;
+  }
+
+  closeLoginDialog() {
+    console.log('openLoginDialog');
+    this.isLoginNeeded = false;
   }
 }
 

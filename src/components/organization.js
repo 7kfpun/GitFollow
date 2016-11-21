@@ -71,7 +71,7 @@ export default class Organization extends Component {
       if (this.state.orderBy === 'NAME') {
         organizations = this.state.organizations.sort((a, b) => a.login.localeCompare(b.login));
       } else {
-        organizations = this.state.organizations.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+        organizations = this.state.organizations.sort((a, b) => b.timestamp - a.timestamp);
       }
 
       return (

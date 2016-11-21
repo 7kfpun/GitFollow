@@ -101,8 +101,7 @@ export default class Login extends Component {
     const actions = [
       <FlatButton
         label="Cancel"
-        primary={true}
-        onTouchTap={() => this.handleClose()}
+        onTouchTap={() => this.props.AuthStore.closeLoginDialog()}
       />,
       <FlatButton
         label="Login with Github"
@@ -115,6 +114,7 @@ export default class Login extends Component {
       <div style={styles.container}>
         <Card>
           <h4 style={{ paddingTop: 50 }}>Welcome to GitFollow</h4>
+          <p>Add ability to follow organizations like a user</p>
           <CardActions style={{ paddingBottom: 50, alignItems: 'center' }}>
             <RaisedButton
               label="Login with GitHub"
@@ -128,9 +128,9 @@ export default class Login extends Component {
         <Dialog
           title="Login with your Github Account"
           actions={actions}
-          onRequestClose={() => this.handleClose()}
+          onRequestClose={() => this.props.AuthStore.closeLoginDialog()}
           modal={true}
-          open={this.state.open}
+          open={this.props.open}
         >
           {'Let\'s login with your GitHub account and start following organizations you like.'}
         </Dialog>
@@ -143,6 +143,7 @@ Login.propTypes = {
   AuthStore: React.PropTypes.shape({
     setAccessToken: React.PropTypes.func,
     setUserInfo: React.PropTypes.func,
+    closeLoginDialog: React.PropTypes.func,
   }),
   open: React.PropTypes.bool,
 };
