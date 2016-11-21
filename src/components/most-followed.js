@@ -139,6 +139,7 @@ export default class Organization extends Component {
           {this.state.isLoading && <CircularProgress style={{ marginLeft: 15 }} size={20} />}
           {today.map((item, i) => <ListItem
             key={i}
+            disabled
             primaryText={`${item.login}`}
             leftAvatar={<Avatar style={styles.avatar} src={item.avatar_url} />}
             rightIcon={<RaisedButton label="Follow" onTouchTap={() => that.props.AuthStore.openLoginDialog()} />}
@@ -149,6 +150,7 @@ export default class Organization extends Component {
           {this.state.isLoading && <CircularProgress style={{ marginLeft: 15 }} size={20} />}
           {this.state.recommended.map((item, i) => <ListItem
             key={i}
+            disabled
             primaryText={`${item.login} (${item.name})`}
             leftAvatar={<Avatar style={styles.avatar} src={item.avatar_url} />}
             rightIcon={<RaisedButton label="Follow" onTouchTap={() => that.props.AuthStore.openLoginDialog()} />}

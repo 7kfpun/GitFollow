@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
+import Snackbar from 'material-ui/Snackbar';
 
 import firebase from 'firebase';
 
@@ -10,6 +11,7 @@ export default class SearchBar extends Component {
     this.state = {
       dataSource: [],
       results: [],
+      snackbarOpen: false,
     };
   }
 
@@ -59,6 +61,9 @@ export default class SearchBar extends Component {
     this.setState({ isFollowed: true });
 
     const uid = this.props.uid;
+    if (!uid) {
+      this.props.AuthStore.openLoginDialog();
+    }
     firebase.database().ref(`following/${uid}`).child(organization.id).set({
       id: organization.id,
       avatar_url: organization.avatar_url,
@@ -68,17 +73,38 @@ export default class SearchBar extends Component {
       type: organization.type,
       timestamp: new Date().getTime(),
     });
+    this.handleSnackbarOpen();
+  }
+
+  handleSnackbarOpen() {
+    this.setState({
+      snackbarOpen: true,
+    });
+  }
+
+  handleRequestSnackbarClose() {
+    this.setState({
+      snackbarOpen: false,
+    });
   }
 
   render() {
     return (
-      <AutoComplete
-        hintText={'Add more organizations...'}
-        dataSource={this.state.dataSource}
-        onUpdateInput={value => this.handleUpdateInput(value)}
-        onNewRequest={value => this.handleNewRequest(value)}
-        maxSearchResults={10}
-      />
+      <div>
+        <AutoComplete
+          hintText={'Search for more organizations...'}
+          dataSource={this.state.dataSource}
+          onUpdateInput={value => this.handleUpdateInput(value)}
+          onNewRequest={value => this.handleNewRequest(value)}
+          maxSearchResults={10}
+        />
+        <Snackbar
+          open={this.state.snackbarOpen}
+          message="Nice! You start following a great organization."
+          autoHideDuration={4000}
+          onRequestClose={() => this.handleRequestClose()}
+        />
+      </div>
     );
   }
 }
@@ -86,4 +112,7 @@ export default class SearchBar extends Component {
 SearchBar.propTypes = {
   accessToken: React.PropTypes.string,
   uid: React.PropTypes.string,
+  AuthStore: React.PropTypes.shape({
+    openLoginDialog: React.PropTypes.func,
+  }),
 };

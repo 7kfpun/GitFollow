@@ -54,32 +54,33 @@ export default class EventList extends Component {
 
     let events = [];
     if (this.state.events) {
-      const rows = this.state.isShowMore ? 100 : MAXROWS;
-      events = this.state.events.slice(0, rows).map((item, i) => {
+      events = this.state.events.map((item, i) => {
         if (item.type === 'WatchEvent') {
-          return (<ListItem
-            key={i}
-            href={`https://github.com/${item.repo.name}`}
-            target="_blank"
-            primaryText={`${item.actor.display_login} watches ${item.repo.name}`}
-            secondaryText={moment(item.created_at).fromNow()}
-            leftIcon={<RemoveRedEye />}
-          />);
+          return null;
+          // return (<ListItem
+          //   key={i}
+          //   href={`https://github.com/${item.repo.name}`}
+          //   target="_blank"
+          //   primaryText={`${item.actor.display_login} watches ${item.repo.name}`}
+          //   secondaryText={moment(item.created_at).fromNow()}
+          //   leftIcon={<RemoveRedEye />}
+          // />);
         } else if (item.type === 'ForkEvent') {
-          return (<ListItem
-            key={i}
-            href={`https://github.com/${item.repo.name}`}
-            target="_blank"
-            primaryText={`${item.actor.display_login} forks ${item.repo.name}`}
-            secondaryText={moment(item.created_at).fromNow()}
-            leftIcon={<GoRepoForked />}
-          />);
+          return null;
+          // return (<ListItem
+          //   key={i}
+          //   href={`https://github.com/${item.repo.name}`}
+          //   target="_blank"
+          //   primaryText={`${item.actor.display_login} forks ${item.repo.name}`}
+          //   secondaryText={moment(item.created_at).fromNow()}
+          //   leftIcon={<GoRepoForked />}
+          // />);
         } else if (item.type === 'IssuesEvent') {
           return (<ListItem
             key={i}
             href={item.payload.issue.html_url}
             target="_blank"
-            primaryText={`${item.actor.display_login} ${item.payload.action} on issue of ${item.repo.name}`}
+            primaryText={`${item.actor.display_login} ${item.payload.action} ${item.payload.action === 'opened' ? 'an' : 'the'} issue of ${item.repo.name}`}
             secondaryText={
               <p>
                 {moment(item.created_at).fromNow()}
@@ -121,7 +122,7 @@ export default class EventList extends Component {
             key={i}
             href={item.payload.pull_request.html_url}
             target="_blank"
-            primaryText={`${item.actor.display_login} a commented on a pull request of ${item.repo.name}`}
+            primaryText={`${item.actor.display_login} commented on the pull request of ${item.repo.name}`}
             secondaryText={
               <p>
                 <span style={{ color: darkBlack }}>to me, Scott, Jennifer</span> --
@@ -134,12 +135,15 @@ export default class EventList extends Component {
         // GollumEvent
         return null;
       });
+
+      const rows = this.state.isShowMore ? 100 : MAXROWS;
+      events = events.filter(n => n).slice(0, rows);  // if "null" values are to be removed
     }
 
     return (
       <div>
         <List>{events}</List>
-        <FlatButton label={!this.state.isShowMore ? 'SHOW MORE' : 'SHOW LESS'} onTouchTap={() => this.setState({ isShowMore: !this.state.isShowMore })} />
+        {events.length > 0 && <FlatButton label={!this.state.isShowMore ? 'SHOW MORE' : 'SHOW LESS'} onTouchTap={() => this.setState({ isShowMore: !this.state.isShowMore })} />}
         <FlatButton label={'UNFOLLOW'} labelStyle={{ color: '#F44336' }} onTouchTap={() => this.unfollowOrganization(this.props.organization)} />
       </div>
     );
