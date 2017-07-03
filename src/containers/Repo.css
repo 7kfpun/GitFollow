@@ -1,0 +1,10 @@
+.Repo {
+  flex: 1;
+  height: 100%;
+  width: 280px;
+  flex-basis: auto;
+  flex-grow: 1;
+  min-height: 360px;
+  overflow: scroll;
+  border-right: 1px solid #e6e6e6;
+}

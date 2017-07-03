@@ -1,0 +1,28 @@
+.WithLove {
+  position: fixed;
+  bottom: 0;
+  right: 10px;
+  padding-top: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #607D8B;
+  display: flex;
+  flex-direction: row;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.WithLove-text {
+  color: white;
+  font-size: 12px;
+  font-family: Roboto Condensed, sans-serif;
+  font-weight: 100;
+}
+
+.WithLove-email {
+  color: white;
+  font-size: 12px;
+  font-family: Roboto Condensed, sans-serif;
+  font-weight: 100;
+  margin-left: 4px;
+}

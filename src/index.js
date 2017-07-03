@@ -1,40 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { h, render } from 'preact';
 
-import { Provider } from 'mobx-react';
-
-import firebase from 'firebase';
-
-import App from './App';
-import Landing from './Landing';
-import AuthStore from './store/authStore';
+import 'primer-css/build/build.css';
 
 import './index.css';
 
-const config = {
-  apiKey: 'AIzaSyDMTCNj5Xa_O4VmNOFncN2qCd0ml_gHbV8',
-  authDomain: 'gitfollow.firebaseapp.com',
-  databaseURL: 'https://gitfollow.firebaseio.com',
-  storageBucket: 'gitfollow.appspot.com',
-  messagingSenderId: '1014685065269',
-};
-firebase.initializeApp(config);
+if (process.env.NODE_ENV === 'development') {
+  // Enable preact devtools
+  require('preact/devtools');
+}
 
-injectTapEventPlugin();
+let root;
+function init() {
+  const App = require('./App').default;
+  root = render(<App />, document.querySelector('#app'), root);
+}
 
-const stores = { AuthStore };
+if (module.hot) {
+  module.hot.accept('./App', init);
+}
 
-ReactDOM.render(
-  <MuiThemeProvider>
-    <Provider {...stores}>
-      <Router history={browserHistory}>
-        <Route path="/" component={App} />
-        <Route path="/landing" component={Landing} />
-      </Router>
-    </Provider>
-  </MuiThemeProvider>,
-  document.getElementById('root')  // eslint-disable-line no-undef
-);
+init();

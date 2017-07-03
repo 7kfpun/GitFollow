@@ -1,0 +1,40 @@
+.SearchItem {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.SearchItem:hover {
+  background-color: #f5f5f5;
+}
+
+.SearchItem-left {
+  flex-direction: column;
+}
+
+.SearchItem-name {
+  font-size: 14px;
+  text-align: left;
+  word-break: break-all;
+}
+
+.SearchItem-type {
+  font-size: 14px;
+  font-weight: 200;
+  text-align: left;
+  word-break: break-all;
+}
+
+.SearchItem-followed-button {
+  font-size: 12px;
+  padding: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 3px;
+  color: white;
+  background-color: #82B1FF;
+}

@@ -1,0 +1,42 @@
+.RepoItem {
+  border-bottom: 1px solid #e6e6e6;
+  padding: 15px;
+  display: flex;
+  align-items: left;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.RepoItemSelected {
+  height: 80px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 15px;
+  display: flex;
+  align-items: left;
+  justify-content: flex-start;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+.RepoItem-name {
+  font-size: 14px;
+  text-align: left;
+  word-break: break-all;
+}
+
+.RepoItem-update-at {
+  font-size: 12px;
+  font-weight: 200;
+  margin-left: 10px;
+}
+
+.RepoItem-description {
+  font-size: 14px;
+  font-weight: 200;
+  text-align: left;
+  word-break: break-all;
+}
+
+.RepoItem-info {
+  font-size: 12px;
+}

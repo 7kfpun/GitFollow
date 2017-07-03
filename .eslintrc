@@ -1,13 +1,47 @@
 {
   "extends": "airbnb",
 
+  "parser": "babel-eslint",
+
+  "env": {
+    "browser": true
+  },
+
+  "plugins": [
+    "react"
+  ],
+
+  "settings": {
+    "react": {
+      "pragma": "h"
+    }
+  },
+
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "modules": true,
+      "jsx": true
+    }
+  },
+
   "rules": {
-    "max-len": ["error", 200, 4],
+    "max-len": ["error", 300, 4],
+    "jsx-a11y/href-no-hash": 0,
     "react/jsx-boolean-value": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-no-bind": ["error", {
+      "allowArrowFunctions": true,
+      "allowBind": false,
+      "ignoreRefs": true
+    }],
+    "react/no-did-update-set-state": "error",
+    "react/react-in-jsx-scope": "error",
     "no-console": 0,
+    "no-alert": 0,
+    "no-undef": 0,
     "consistent-return": 0,
-    "global-require": 0,
-    "class-methods-use-this": 0
+    "global-require": 0
   }
 }

@@ -1,0 +1,98 @@
+.Home {
+  height: 100%;
+  min-height: 400px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.Home-header {
+  height: 50px;
+  border-bottom: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.Home-menu-left {
+  display: flex;
+  flex: 1;
+}
+
+.Home-menu-button-on {
+  margin-right: 20px;
+  padding: 14px;
+  background-color: #e6e6e6;
+  font-family: Roboto Condensed, sans-serif;
+  font-weight: 300;
+  color: #000;
+}
+
+.Home-menu-button-on a:hover {
+  text-decoration: none;
+}
+
+.Home-menu-button {
+  margin-right: 20px;
+  padding: 14px;
+  font-family: Roboto Condensed, sans-serif;
+  font-weight: 300;
+  color: #000;
+}
+
+.Home-menu-button a:hover {
+  text-decoration: none;
+}
+
+.Home-menu-icon {
+  margin-right: 10px;
+  flex: 1;
+}
+
+.Home-menuCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Home-menu-right {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.Home-sign-out-icon {
+  margin-left: 10px;
+}
+
+.Home-logo {
+  max-height: 32px;
+  max-width: 32px;
+  border-radius: 50%;
+}
+
+.Home-content {
+  height: 94%;
+  min-height: 360px;
+  display: flex;
+  flex-direction: row;
+}
+
+.Home-content-right {
+  flex: 2.5;
+  height: 100%;
+  min-height: 360px;
+  background-color: black;
+}
+
+form input {
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  text-transform: uppercase;
+  text-align: center;
+}
