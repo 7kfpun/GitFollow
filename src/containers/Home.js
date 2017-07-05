@@ -10,15 +10,20 @@ import { bindActions } from '../util';  // eslint-disable-line
 import reduce from '../reducers';  // eslint-disable-line
 import * as actions from '../actions';  // eslint-disable-line
 
+import Landing from './Landing';
 import Organization from './Organization';
 import RecentOrganization from './RecentOrganization';
 import Repo from './Repo';
 import RepoReadMe from './RepoReadMe';
-import SearchBar from '../components/SearchBar';
+import SearchOrganization from './SearchOrganization';
 import TrendingOrganization from './TrendingOrganization';
+
+import SearchBar from '../components/SearchBar';
 import WithLove from '../components/WithLove';
 
 import './Home.css';
+
+const ENTER_KEY = 13;
 
 @connect(reduce, bindActions(actions))
 export default class Home extends Component {
@@ -92,14 +97,22 @@ export default class Home extends Component {
     }
   }
 
-  render({ selectedOrganization, selectedRepo, path }, { user, accessToken, isLogged, searchValue }) {
+  handleKeyPress = (event) => {
+    if (event.keyCode === ENTER_KEY) {
+      console.log('enter press here! ');
+      this.setState({ isPressSearch: Math.random() });
+      event.preventDefault();
+    }
+  }
+
+  render({ selectedOrganization, selectedRepo, selectOrganization, selectRepo, path }, { user, accessToken, isLogged, searchValue, isPressSearch }) {
     console.log('path', path);
     return (<div className="Home">
       <div className="Home-header">
         <div className="Home-menu-left">
-          <a href="/" className={path === '/' ? 'Home-menu-button-on' : 'Home-menu-button'}>GitFollow</a>
-          <a href="/recently" className={path === '/recently' ? 'Home-menu-button-on' : 'Home-menu-button'}>Recently</a>
-          <a href="/trending" className={path === '/trending' ? 'Home-menu-button-on' : 'Home-menu-button'}>Trending</a>
+          <a href="/" className={path === '/' && !searchValue ? 'Home-menu-button-on' : 'Home-menu-button'} onClick={() => { this.setState({ searchValue: '' }); selectOrganization(); selectRepo(); }}>GitFollow</a>
+          <a href="/recently" className={path === '/recently' && !searchValue ? 'Home-menu-button-on' : 'Home-menu-button'} onClick={() => { this.setState({ searchValue: '' }); selectOrganization(); selectRepo(); }}>Recently</a>
+          <a href="/trending" className={path === '/trending' && !searchValue ? 'Home-menu-button-on' : 'Home-menu-button'} onClick={() => { this.setState({ searchValue: '' }); selectOrganization(); selectRepo(); }}>Trending</a>
         </div>
         <div className="Home-menuCenter">
           <form>
@@ -107,6 +120,7 @@ export default class Home extends Component {
               type="text"
               value={searchValue}
               onInput={linkState(this, 'searchValue')}
+              onKeyPress={this.handleKeyPress}
               placeholder="Search"
             />
           </form>
@@ -115,7 +129,10 @@ export default class Home extends Component {
         {searchValue && <SearchBar user={user} accessToken={accessToken} text={searchValue} />}
 
         {!isLogged && <div className="Home-menu-right">
-          <Octicon className="Home-sign-out-icon" name="logo-github" onClick={() => this.toggleSignIn()} />
+          <a href="#" onClick={() => this.toggleSignIn()}>
+            <span>Login with</span>
+            <Octicon className="Home-logo-github-icon" name="logo-github" />
+          </a>
         </div>}
         {isLogged && <div className="Home-menu-right">
           <img className="Home-logo" alt="avatar" src={user.photoURL} />
@@ -124,13 +141,16 @@ export default class Home extends Component {
       </div>
 
       <div className="Home-content">
-        {path === '/' && user && <Organization user={user} accessToken={accessToken} />}
-        {path === '/recently' && <RecentOrganization user={user} accessToken={accessToken} />}
-        {path === '/trending' && <TrendingOrganization user={user} accessToken={accessToken} />}
+        {path === '/' && user && !searchValue && <Organization user={user} accessToken={accessToken} />}
+        {path === '/' && !user && !searchValue && <Landing />}
 
-        <Repo selectedOrganization={selectedOrganization} accessToken={accessToken} />
+        {searchValue && <SearchOrganization user={user} accessToken={accessToken} text={searchValue} isPressSearch={isPressSearch} />}
 
-        <RepoReadMe selectedRepo={selectedRepo} accessToken={accessToken} />
+        {path === '/recently' && !searchValue && <RecentOrganization user={user} accessToken={accessToken} />}
+        {path === '/trending' && !searchValue && <TrendingOrganization user={user} accessToken={accessToken} />}
+
+        {(path === '/recently' || path === '/trending' || user || searchValue) && <Repo selectedOrganization={selectedOrganization} accessToken={accessToken} />}
+        {(path === '/recently' || path === '/trending' || user || searchValue) && <RepoReadMe selectedRepo={selectedRepo} accessToken={accessToken} />}
       </div>
 
       <WithLove />

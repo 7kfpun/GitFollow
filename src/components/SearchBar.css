@@ -11,4 +11,5 @@
   border-right: 1px solid #e6e6e6;
   border-bottom: 1px solid #e6e6e6;
   overflow: scroll;
+  z-index: 10;
 }

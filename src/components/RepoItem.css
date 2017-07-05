@@ -21,7 +21,7 @@
 .RepoItem-name {
   font-size: 14px;
   text-align: left;
-  word-break: break-all;
+  /*word-break: break-all;*/
 }
 
 .RepoItem-update-at {
@@ -34,9 +34,10 @@
   font-size: 14px;
   font-weight: 200;
   text-align: left;
-  word-break: break-all;
+  /*word-break: break-all;*/
 }
 
 .RepoItem-info {
   font-size: 12px;
+  text-align: left;
 }

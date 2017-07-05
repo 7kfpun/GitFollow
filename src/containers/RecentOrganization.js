@@ -5,7 +5,7 @@ import OrganizationItem from '../components/OrganizationItem';
 
 import './Organization.css';
 
-export default class RecentlyOrganization extends Component {
+export default class RecentOrganization extends Component {
   state = {
     items: [],
   }
@@ -13,7 +13,7 @@ export default class RecentlyOrganization extends Component {
   componentDidMount() {
     const that = this;
     const followingRef = firebase.database().ref('organizations');
-    followingRef.orderByChild('updated_at').limitToLast(30).once('value', (snapshot) => {
+    followingRef.orderByChild('timestamp').limitToLast(16).once('value', (snapshot) => {
       if (snapshot.val()) {
         console.log('followingRef', snapshot.val());
         const items = [];

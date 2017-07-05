@@ -5,6 +5,16 @@
   flex-basis: auto;
   flex-grow: 1;
   min-height: 360px;
-  overflow: scroll;
+  overflow-y: scroll;
   border-right: 1px solid #e6e6e6;
+}
+
+@media screen and (max-width: 600px) {
+  .Repo {
+    display: none !important;
+  }
+}
+
+.Repo-empty-box {
+  margin: 20px;
 }

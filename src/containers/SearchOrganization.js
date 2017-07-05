@@ -1,22 +1,20 @@
 import { h, Component } from 'preact';
-import ReactDOM from 'react-dom';
 
-import SearchItem from './SearchItem';
+import OrganizationItem from '../components/OrganizationItem';
 
-import './SearchBar.css';
+import './Organization.css';
 
-export default class SearchBar extends Component {
+export default class SearchOrganization extends Component {
   state = {
     items: [],
-    isHidden: false,
   }
 
-  // componentDidMount() {
-  //   document.addEventListener('click', this.handleClickOutside.bind(this), true);
-  // }
+  shouldComponentUpdate({ text }, { searchedText }) {
+    return text !== this.props.text || searchedText !== this.state.searchedText;
+  }
 
-  shouldComponentUpdate({ text }, { searchedText, isHidden }) {
-    return text !== this.props.text || searchedText !== this.state.searchedText || isHidden !== this.state.isHidden;
+  componentDidMount() {
+    this.handleUpdateInput(this.props.text, this.props.accessToken);
   }
 
   componentDidUpdate() {
@@ -25,27 +23,7 @@ export default class SearchBar extends Component {
     }
   }
 
-  // componentWillUnmount() {
-  //   document.removeEventListener('click', this.handleClickOutside.bind(this), true);
-  // }
-
-  handleClickOutside(event) {
-    const domNode = ReactDOM.findDOMNode(this);
-
-    if ((!domNode || !domNode.contains(event.target))) {
-      console.log('Outside');
-      this.setState({
-        isHidden: true,
-      });
-    }
-  }
-
   handleUpdateInput(value, accessToken) {
-    return false;
-    if (value.length < 2) {
-      return false;
-    }
-
     const endpoint = 'users';
     const tempType = 'org';
 
@@ -82,17 +60,10 @@ export default class SearchBar extends Component {
       });
   }
 
-  render({ user, text }, { items, isHidden }) {
-    if (isHidden) {
-      return null;
-    }
-
+  render({ user, accessToken }, { items }) {
     return (
-      <div
-        role="button"
-        className="SearchBar"
-      >
-        {items.map(item => <SearchItem user={user} item={item} />)}
+      <div className="Organization">
+        {items.map(item => <OrganizationItem key={item.login} item={item} accessToken={accessToken} user={user} canFollow={true} />)}
       </div>
     );
   }

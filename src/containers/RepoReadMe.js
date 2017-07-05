@@ -1,16 +1,19 @@
 import { h, Component } from 'preact';
 import ReactMarkdown from 'react-markdown';
 
+import RateLimit from '../components/RateLimit';
+
 import './RepoReadMe.css';
 
 export default class RepoReadMe extends Component {
   state = {
     markdown: '',
     loadedRepoUrl: null,
+    isRateLimit: false,
   }
 
-  shouldComponentUpdate({ selectedRepo }, { loadedRepoUrl }) {
-    return selectedRepo !== this.props.selectedRepo || loadedRepoUrl !== this.state.loadedRepoUrl;
+  shouldComponentUpdate({ selectedRepo }, { loadedRepoUrl, isRateLimit }) {
+    return selectedRepo !== this.props.selectedRepo || loadedRepoUrl !== this.state.loadedRepoUrl || isRateLimit !== this.state.isRateLimit;
   }
 
   componentDidUpdate() {
@@ -28,7 +31,11 @@ export default class RepoReadMe extends Component {
       .then(response => response.json())
       .then((json) => {
         console.log('Response ReadMe API', json);
-        if (json && json.download_url) {
+        if (json && json.download_url && json.download_url === 'https://developer.github.com/v3/#rate-limiting') {
+          that.setState({
+            isRateLimit: true,
+          });
+        } else if (json && json.download_url) {
           const downloadUrl = accessToken ? `${json.download_url}?access_token=${accessToken}` : json.download_url;
           console.log('Fetch ReadMe content', downloadUrl);
           fetch(downloadUrl)  // eslint-disable-line no-undef
@@ -38,28 +45,33 @@ export default class RepoReadMe extends Component {
               that.setState({
                 markdown: text,
                 loadedRepoUrl: url,
+                isRateLimit: false,
               });
             })
-            .catch(err => console.error(err));
+            .catch((err) => {
+              console.error(err);
+              that.setState({
+                isRateLimit: false,
+              });
+            });
         }
       })
       .catch(err => console.error(err));
   }
 
-  render({ selectedRepo }, { markdown }) {
+  render({ selectedRepo }, { markdown, isRateLimit }) {
     if (!selectedRepo) {
       return null;
     }
 
     return (
-      <div
-        className="RepoReadMe"
-      >
+      <div className="RepoReadMe">
         <div className="RepoReadMe-title-block">
-          <span className="RepoReadMe-title">{selectedRepo.name}</span>
-          <a href={selectedRepo.html_url} target="_blank">View on GitHub</a>
+          <span className="RepoReadMe-title">{selectedRepo.name && selectedRepo.name.toUpperCase()}</span>
+          <a className="RepoReadMe-title-url" href={selectedRepo.html_url} target="_blank">View on GitHub</a>
         </div>
-        <ReactMarkdown className="RepoReadMe-body" source={markdown} />
+
+        {isRateLimit ? <RateLimit /> : <div className="RepoReadMe-body"><ReactMarkdown source={markdown} /></div>}
       </div>
     );
   }

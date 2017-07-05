@@ -1,6 +1,5 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';  // eslint-disable-line
-import Octicon from 'react-octicon';
 
 import firebase from 'firebase';
 
@@ -16,14 +15,8 @@ export default class OrganizationItem extends Component {
     organization: {},
   }
 
-  static storeOrganization(organization, user) {
-    Object.keys(organization).forEach((key) => {
-      console.log(key, organization[key]);
-      firebase.database().ref(`organizations/${organization.id}`).child(key).set(organization[key]);
-    });
-
-    // firebase.database().ref(`following/${uid}`).child(organization.id).set(data);
-    // firebase.database().ref('organizations').child(organization.id).set(data);
+  shouldComponentUpdate({ selectedOrganization }, { organization, isFollowed }) {
+    return selectedOrganization !== this.props.selectedOrganization || (organization && this.state.organization && organization.id !== this.state.organization.id) || isFollowed !== this.state.isFollowed;
   }
 
   componentDidMount() {
@@ -40,10 +33,24 @@ export default class OrganizationItem extends Component {
         console.log('Organization', json);
         if (json) {
           that.setState({ organization: json });
-          OrganizationItem.storeOrganization(json, this.props.user);
         }
       })
       .catch(err => console.error(err));
+
+    const uid = this.props.user && this.props.user.uid;
+    if (uid && this.props.item && this.props.item.id) {
+      const followingRef = firebase.database().ref(`following/${uid}/${this.props.item.id}`);
+      followingRef.on('value', (snapshot) => {
+        console.log('followingRef isFollowed', snapshot.val());
+        if (snapshot.val() && snapshot.val().id === that.props.item.id) {
+          that.setState({ isFollowed: true });
+        } else {
+          that.setState({ isFollowed: false });
+        }
+      });
+    } else {
+      that.setState({ isFollowed: false });
+    }
   }
 
   followOrganization(organization, user) {
@@ -59,7 +66,10 @@ export default class OrganizationItem extends Component {
       timestamp: new Date().getTime(),
     };
     firebase.database().ref(`following/${uid}`).child(organization.id).set(data);
-    OrganizationItem.storeOrganization(data, user);
+    Object.keys(organization).forEach((key) => {
+      console.log(key, organization[key]);
+      firebase.database().ref(`organizations/${organization.id}`).child(key).set(organization[key]);
+    });
   }
 
   unfollowOrganization = (item, user) => {
@@ -67,32 +77,31 @@ export default class OrganizationItem extends Component {
     firebase.database().ref(`following/${user.uid}`).child(item.id).set(null);
   }
 
-  render({ selectedOrganization, item, selectOrganization, user, canFollow }) {
+  render({ selectedOrganization, item, selectOrganization, selectRepo, user, canFollow }, { isFollowed }) {
     return (
       <div
         className={selectedOrganization === item.login ? 'OrganizationItemSelected' : 'OrganizationItem'}
-        onClick={() => { console.log(item.login); selectOrganization(item.login); }}
+        onClick={() => { selectOrganization(item.login); selectRepo(); }}
       >
         <div className="OrganizationItem-left">
-          <img alt="A" className="OrganizationItem-avatar" src={item.avatar_url} />
+          <img alt="" className="OrganizationItem-avatar" src={item.avatar_url} />
           <div className="OrganizationItem-details">
             <span className="OrganizationItem-name">{this.state.organization.name || item.login}</span>
-            <div className="OrganizationItem-location">{this.state.organization.location || this.state.organization.login}</div>
-            <div className="OrganizationItem-location">{this.state.organization.public_repos} repos</div>
+            <div className="OrganizationItem-location">{this.state.organization.location || item.type}</div>
+            {this.state.organization.public_repos && <div className="OrganizationItem-location">{this.state.organization.public_repos} repos</div>}
           </div>
         </div>
-        {user && !canFollow && <a href="#">
-          <Octicon
-            className="OrganizationItem-delete-icon"
-            name="trashcan"
+        {user && isFollowed && <a href="#">
+          <button
+            className="OrganizationItem-unfollow-button btn"
             onClick={(e) => { e.stopPropagation(); this.unfollowOrganization(item, user); }}
-          />
+          >Unfollow</button>
         </a>}
-        {user && canFollow && <a href="#">
-          <span
-            className="OrganizationItem-delete-icon"
+        {user && !isFollowed && <a href="#">
+          <button
+            className="OrganizationItem-follow-button btn"
             onClick={(e) => { e.stopPropagation(); this.followOrganization(item, user); }}
-          >follow</span>
+          >Follow</button>
         </a>}
       </div>
     );

@@ -6,3 +6,11 @@ body {
   margin: 0;
   padding: 0;
 }
+
+a {
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+}

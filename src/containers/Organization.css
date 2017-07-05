@@ -5,7 +5,7 @@
   flex-basis: auto;
   flex-grow: 1;
   min-height: 360px;
-  overflow: scroll;
+  overflow-y: scroll;
   border-right: 1px solid #e6e6e6;
 }
 
@@ -16,4 +16,5 @@
   justify-content: center;
   height: 100%;
   flex-direction: column;
+  line-height: 30px;
 }

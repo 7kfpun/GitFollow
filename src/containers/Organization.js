@@ -8,7 +8,7 @@ import './Organization.css';
 export default class Organization extends Component {
   state = {
     items: [],
-    isEmpty: true,
+    isEmpty: null,
   }
 
   shouldComponentUpdate({ user }, { isEmpty }) {
