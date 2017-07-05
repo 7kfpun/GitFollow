@@ -8,7 +8,8 @@
     },
     "organizations": {
       ".read": true,
-    	".write": true
+      ".write": true,
+      ".indexOn": "timestamp"
     }
   }
 }
