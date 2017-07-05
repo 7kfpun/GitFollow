@@ -36,7 +36,7 @@ export default class Repo extends Component {
 
     const that = this;
     let url = `https://api.github.com/search/repositories?q=user:${selectedOrganization}&sort=updated&order=desc`;
-    // let url = `https://api.github.com/users/${selectedOrganization}/repos`;
+    // let url = `https://api.github.com/users/${selectedOrganization}/repos?`;
     if (accessToken) {
       url += `&access_token=${accessToken}`;
     }

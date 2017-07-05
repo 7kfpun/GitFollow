@@ -1,5 +1,7 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';  // eslint-disable-line
+import ReactPlaceholder from 'react-placeholder';
+import { TextBlock, RoundShape } from 'react-placeholder/lib/placeholders';
 
 import firebase from 'firebase';
 
@@ -8,6 +10,14 @@ import reduce from '../reducers';  // eslint-disable-line
 import * as actions from '../actions';  // eslint-disable-line
 
 import './OrganizationItem.css';
+import '../../node_modules/react-placeholder/lib/reactPlaceholder.css';
+
+const awesomePlaceholder = (
+  <div className="OrganizationItem OrganizationItem-react-placeholder">
+    <RoundShape color="#e0e0e0" style={{ width: 40, height: 40, marginRight: 15 }} />
+    <TextBlock rows={3} color="#e0e0e0" style={{ height: 30, paddingRight: 100 }} />
+  </div>
+);
 
 @connect(reduce, bindActions(actions))
 export default class OrganizationItem extends Component {
@@ -77,33 +87,41 @@ export default class OrganizationItem extends Component {
     firebase.database().ref(`following/${user.uid}`).child(item.id).set(null);
   }
 
-  render({ selectedOrganization, item, selectOrganization, selectRepo, user, canFollow }, { isFollowed }) {
+  render({ selectedOrganization, item, selectOrganization, selectRepo, user, canFollow }, { isFollowed, organization }) {
     return (
-      <div
-        className={selectedOrganization === item.login ? 'OrganizationItemSelected' : 'OrganizationItem'}
-        onClick={() => { selectOrganization(item.login); selectRepo(); }}
+      <ReactPlaceholder
+        showLoadingAnimation
+        ready={organization.id}
+        type="media"
+        rows={3}
+        customPlaceholder={awesomePlaceholder}
       >
-        <div className="OrganizationItem-left">
-          <img alt="" className="OrganizationItem-avatar" src={item.avatar_url} />
-          <div className="OrganizationItem-details">
-            <span className="OrganizationItem-name">{this.state.organization.name || item.login}</span>
-            <div className="OrganizationItem-location">{this.state.organization.location || item.type}</div>
-            {this.state.organization.public_repos && <div className="OrganizationItem-location">{this.state.organization.public_repos} repos</div>}
+        <div
+          className={selectedOrganization === item.login ? 'OrganizationItemSelected' : 'OrganizationItem'}
+          onClick={() => { selectOrganization(item.login); selectRepo(); }}
+        >
+          <div className="OrganizationItem-left">
+            <img alt="" className="OrganizationItem-avatar" src={item.avatar_url} />
+            <div className="OrganizationItem-details">
+              <span className="OrganizationItem-name">{organization.name || item.login}</span>
+              <div className="OrganizationItem-location">{organization.location || item.type}</div>
+              {organization.public_repos && <div className="OrganizationItem-location">{organization.public_repos} repos</div>}
+            </div>
           </div>
+          {user && isFollowed && <a href="#">
+            <button
+              className="OrganizationItem-unfollow-button btn"
+              onClick={(e) => { e.stopPropagation(); this.unfollowOrganization(item, user); }}
+            >Unfollow</button>
+          </a>}
+          {user && !isFollowed && <a href="#">
+            <button
+              className="OrganizationItem-follow-button btn"
+              onClick={(e) => { e.stopPropagation(); this.followOrganization(item, user); }}
+            >Follow</button>
+          </a>}
         </div>
-        {user && isFollowed && <a href="#">
-          <button
-            className="OrganizationItem-unfollow-button btn"
-            onClick={(e) => { e.stopPropagation(); this.unfollowOrganization(item, user); }}
-          >Unfollow</button>
-        </a>}
-        {user && !isFollowed && <a href="#">
-          <button
-            className="OrganizationItem-follow-button btn"
-            onClick={(e) => { e.stopPropagation(); this.followOrganization(item, user); }}
-          >Follow</button>
-        </a>}
-      </div>
+      </ReactPlaceholder>
     );
   }
 }

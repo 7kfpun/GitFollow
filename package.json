@@ -27,6 +27,7 @@
     "react-markdown": "^2.5.0",
     "react-octicon": "^2.0.0",
     "react-onclickoutside": "^6.1.1",
+    "react-placeholder": "^1.0.5",
     "react-timeago": "^3.3.0",
     "redux": "^3.7.1",
     "store2": "^2.5.1"

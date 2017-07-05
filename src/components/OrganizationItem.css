@@ -17,6 +17,10 @@
   background-color: #f5f5f5;
 }
 
+.OrganizationItem-react-placeholder {
+  padding: 20px;
+}
+
 .OrganizationItem-left {
   display: flex;
   padding: 10px;
