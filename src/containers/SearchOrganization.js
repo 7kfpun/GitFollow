@@ -4,6 +4,8 @@ import OrganizationItem from '../components/OrganizationItem';
 
 import './Organization.css';
 
+let timeoutDebounce = null;
+
 export default class SearchOrganization extends Component {
   state = {
     items: [],
@@ -14,12 +16,16 @@ export default class SearchOrganization extends Component {
   }
 
   componentDidMount() {
-    this.handleUpdateInput(this.props.text, this.props.accessToken);
+    // this.handleUpdateInput(this.props.text, this.props.accessToken);
   }
 
   componentDidUpdate() {
     if (this.props.text !== this.state.searchedText) {
-      this.handleUpdateInput(this.props.text, this.props.accessToken);
+      clearTimeout(timeoutDebounce)
+
+      timeoutDebounce = setTimeout(() => {
+        this.handleUpdateInput(this.props.text, this.props.accessToken);
+      }, 1500);
     }
   }
 

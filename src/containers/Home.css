@@ -55,21 +55,23 @@
   justify-content: center;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 540px) {
   .Home-menuCenter {
     display: none !important;
   }
+}
 
+@media screen and (max-width: 700px) {
   .Home-menu-button-on {
-    font-size: 13px;
-    padding-left: 8px;
-    padding-right: 8px;
+    font-size: 12px;
+    padding-left: 6px;
+    padding-right: 6px;
   }
 
   .Home-menu-button {
-    font-size: 13px;
-    padding-left: 8px;
-    padding-right: 8px;
+    font-size: 12px;
+    padding-left: 6px;
+    padding-right: 6px;
   }
 }
 
@@ -82,6 +84,7 @@
 
 .Home-logo-github-icon {
   margin-left: 5px;
+  margin-right: 15px;
 }
 
 .Home-sign-out-icon {
@@ -106,8 +109,12 @@
 form input {
   border: none;
   background: transparent;
-  border-bottom: 1px solid #fff;
   outline: none;
   text-transform: uppercase;
   text-align: center;
+  border: 1px solid #e6e6e6;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
